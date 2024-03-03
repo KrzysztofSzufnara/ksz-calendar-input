@@ -1,0 +1,46 @@
+// colors
+$calendar-color: #bfd6f5;
+$input-outline: #6882a5;
+//settings
+$input-height: 2rem;
+
+.input-container {
+  position: relative;
+  width: 100%;
+  max-width: 280px;
+  margin: 20px auto;
+  height: $input-height;
+  cursor: pointer;
+  user-select: none;
+}
+
+input {
+  padding: 8px;
+  font-size: 14px;
+  height: $input-height;
+  border: none;
+}
+
+input:focus {
+  outline: $input-outline solid 1px;
+  outline-offset: -2px;
+}
+.input-container label {
+  margin-right: 10px;
+}
+
+.calendar-button {
+  margin-left: 0;
+  background-color: $calendar-color;
+  border: none;
+  height: $input-height;
+  width: $input-height;
+}
+
+.calendar-button:hover {
+  background-color: rgba($calendar-color, 0.8);
+}
+
+.calendar-button:active {
+  background-color: rgba($calendar-color, 0.6);
+}

@@ -1,0 +1,37 @@
+<div class="calendar-container">
+  <p>Pick date:</p>
+  @if (dirtyInput) {
+  <p style="color: red">Bad input date!</p>
+  }
+  <div class="month">
+    <div class="arrows prev-mth">&lt;</div>
+    <div class="mth">{{ monthNames[currentMonth] }}</div>
+    <div class="arrows next-mth">&gt;</div>
+  </div>
+  <div class="week" [ngClass]="{ 'week-show': showWeeks }">
+    @if(showWeeks) {
+    <div class="week-number">Wk</div>
+    } @for (dayName of dayNames; track $index) {
+    <div class="week-number">{{ dayName }}</div>
+    }
+  </div>
+  @for (week of weeks; track $index) {
+  <div class="week" [ngClass]="{ 'week-show': showWeeks }">
+    @if(showWeeks) {
+    <div class="week-number">W:{{ week.weekNumber }}</div>
+    } @for (day of week.days; track $index) {
+    <div
+      class="day"
+      [ngClass]="{
+        selected: day.selected,
+        disabled: day.disabled,
+        today: day.today,
+        holiday: day.holiday
+      }"
+    >
+      {{ day.day }}
+    </div>
+    }
+  </div>
+  }
+</div>

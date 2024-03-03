@@ -1,0 +1,79 @@
+.calendar-container {
+  margin: auto;
+  position: relative;
+  z-index: 1;
+  top: 0px;
+
+  left: 0px;
+  right: 0px;
+  border: 1px solid black;
+  border-radius: 3px;
+  min-height: 80px;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.week-show {
+  grid-template-columns: repeat(8, 1fr);
+}
+
+.week-number {
+  color: yellowgreen;
+  text-align: center;
+  align-content: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.day {
+  color: lightgrey;
+  text-align: center;
+  align-content: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.selected {
+  background-color: rgba(200, 128, 200, 0.5);
+}
+.disabled {
+  color: #777;
+}
+.today {
+  background-color: rgba(128, 200, 128, 0.3);
+}
+.holiday {
+  color: darkorange;
+}
+
+.day:hover {
+  background-color: rgba(128, 128, 200, 0.5);
+}
+.month {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #eee;
+}
+
+.month .mth {
+  text-align: center;
+  align-content: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  color: #eee;
+  font-weight: bold;
+}
+.month .arrows {
+  cursor: pointer;
+  background-color: rgba($color: #101010, $alpha: 0.5);
+  color: #eee;
+  text-align: center;
+  align-content: center;
+  border-radius: 3px;
+  border: 1px solid #777;
+  font-weight: bolder;
+  padding: 5px 10px;
+}

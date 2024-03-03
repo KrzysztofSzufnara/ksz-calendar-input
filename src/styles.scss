@@ -1,1 +1,23 @@
 /* You can add global styles to this file, and also import other style files */
+@import "@fortawesome/fontawesome-free/scss/fontawesome.scss";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  background-color: #536275;
+  font-family: Arial, Helvetica, sans-serif;
+}
+h3 {
+  color: white;
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+p {
+  color: white;
+  text-align: center;
+}

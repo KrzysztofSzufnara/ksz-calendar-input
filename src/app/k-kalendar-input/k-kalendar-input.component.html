@@ -1,0 +1,22 @@
+<div class="input-container">
+  <label>{{ label }}</label>
+  <input
+    type="text"
+    [formControl]="formControl"
+    (input)="onChange($event)"
+    (focus)="showCalendar = true"
+  />
+  <!-- (blur)="showCalendar = false" -->
+  <button class="calendar-button" (click)="openCalendar()">
+    <i class="fa fa-calendar-days"></i>
+  </button>
+  @if (showCalendar) {
+  <app-calendar-table
+    [showWeeks]="true"
+    [startDate]="formControl.value"
+    [setDate]="inputDate$?.asObservable()"
+  ></app-calendar-table>
+
+  }
+  <!-- [value]="value" [id]="fieldName" [name]="fieldName" -->
+</div>
