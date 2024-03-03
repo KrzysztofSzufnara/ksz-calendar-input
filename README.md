@@ -1,3 +1,7 @@
+# Calendar
+
+Created for tests, for now. Dynamic input for date with calendar.
+
 # KszCalendarInput
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.1.
