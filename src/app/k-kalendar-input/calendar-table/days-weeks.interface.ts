@@ -4,6 +4,7 @@ export default interface DayOfWeek {
   disabled: boolean;
   today: boolean;
   holiday: boolean;
+  date: Date;
 }
 
 export interface WeekOfMonth {

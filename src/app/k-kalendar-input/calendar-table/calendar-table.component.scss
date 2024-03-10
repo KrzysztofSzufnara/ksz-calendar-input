@@ -42,7 +42,8 @@
   color: #777;
 }
 .today {
-  background-color: rgba(128, 200, 128, 0.3);
+  border: 2px solid #ff000088;
+  border-radius: 25%;
 }
 .holiday {
   color: darkorange;
@@ -59,8 +60,11 @@
 }
 
 .month .mth {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   text-align: center;
-  align-content: center;
+  align-content: space-between;
   padding-top: 5px;
   padding-bottom: 5px;
   color: #eee;

@@ -13,8 +13,9 @@
   @if (showCalendar) {
   <app-calendar-table
     [showWeeks]="true"
-    [startDate]="formControl.value"
+    [inputDate]="formControl.value"
     [setDate]="inputDate$?.asObservable()"
+    (dateSelected)="setDate($event)"
   ></app-calendar-table>
 
   }

@@ -21,6 +21,7 @@ import { BehaviorSubject, Subject, debounceTime, noop, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { CalendarTableComponent } from './calendar-table/calendar-table.component';
+import { DateHelper } from './helpers/date.helper';
 
 @Component({
   selector: 'app-k-kalendar-input',
@@ -97,6 +98,20 @@ export class KKalendarInputComponent implements ControlValueAccessor, OnInit {
 
   openCalendar() {
     this.showCalendar = !this.showCalendar;
+  }
+
+  setDate(date: Date) {
+    //console.log('emit date', new Date(date.setUTCHours(0, 0, 0, 0)));
+    const now_utc = DateHelper.localToUtc(date);
+
+    console.log('utc date', new Date(now_utc));
+
+    const dateString = now_utc.toISOString().slice(0, 10);
+    this.valueChange.emit(dateString);
+    console.log('dateString', dateString);
+
+    this.formControl.setValue(dateString, { emitEvent: true });
+    this.showCalendar = false;
   }
 
   ngOnInit(): void {

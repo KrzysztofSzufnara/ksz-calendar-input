@@ -5,7 +5,10 @@
   }
   <div class="month">
     <div class="arrows prev-mth">&lt;</div>
-    <div class="mth">{{ monthNames[currentMonth] }}</div>
+    <div class="mth">
+      <div>{{ currentYear }}</div>
+      <div>{{ monthNames[currentMonth] }}</div>
+    </div>
     <div class="arrows next-mth">&gt;</div>
   </div>
   <div class="week" [ngClass]="{ 'week-show': showWeeks }">
@@ -28,7 +31,9 @@
         today: day.today,
         holiday: day.holiday
       }"
+      (click)="selectDay(day)"
     >
+      <!-- (click)="day.selected = !day.selected" -->
       {{ day.day }}
     </div>
     }

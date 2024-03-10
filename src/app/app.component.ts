@@ -28,7 +28,7 @@ import {
 export class AppComponent {
   title = 'ksz-calendar-input';
   form = new FormGroup({
-    data: new FormControl('2024-02-01'),
+    data: new FormControl('2024-03-01'),
   });
 
   onSubmit() {
