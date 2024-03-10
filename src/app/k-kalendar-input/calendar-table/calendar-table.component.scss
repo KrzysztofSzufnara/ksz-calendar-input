@@ -20,6 +20,56 @@
   grid-template-columns: repeat(8, 1fr);
 }
 
+.month-select {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.month-item {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  display: flex;
+  flex-direction: column;
+  color: rgba(184, 222, 210, 0.5);
+  text-align: center;
+  align-content: center;
+  font-size: 90%;
+}
+.month-number {
+  color: rgba(184, 222, 210, 0.5);
+  text-align: center;
+  align-content: center;
+}
+
+.month-name {
+  color: rgba(184, 222, 210, 0.5);
+  text-align: center;
+  align-content: center;
+  font-size: small;
+}
+
+.month-item:hover {
+  background-color: #777;
+}
+
+.year-select {
+  display: flex;
+  flex-direction: column;
+}
+
+.year-select .year-item {
+  text-align: center;
+  color: lightgray;
+  padding: 3px;
+  font-weight: 700;
+}
+
+.year-range-change {
+  background-color: rgba(200, 128, 200, 0.5);
+}
+
+.year-item:hover {
+  background-color: #777;
+}
 .week-number {
   color: yellowgreen;
   text-align: center;
@@ -62,13 +112,24 @@
 .month .mth {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-evenly;
   text-align: center;
-  align-content: space-between;
   padding-top: 5px;
   padding-bottom: 5px;
   color: #eee;
   font-weight: bold;
+  margin: auto;
+  width: 100%;
+}
+.month .mth .mth-name {
+  justify-content: center;
+  text-align: center;
+  margin: auto;
+}
+.month .mth .year {
+  justify-content: center;
+  text-align: center;
+  margin: auto;
 }
 .month .arrows {
   cursor: pointer;

@@ -4,39 +4,71 @@
   <p style="color: red">Bad input date!</p>
   }
   <div class="month">
-    <div class="arrows prev-mth">&lt;</div>
+    <div class="arrows prev-mth" (click)="prevMonth()">&lt;</div>
     <div class="mth">
-      <div>{{ currentYear }}</div>
-      <div>{{ monthNames[currentMonth] }}</div>
+      <div class="year" (click)="enterYearSelector()">{{ currentYear }}</div>
+      <div class="mth-name" (click)="enterMonthSelector()">
+        {{ monthNames[currentMonth] }}
+      </div>
     </div>
-    <div class="arrows next-mth">&gt;</div>
+    <div class="arrows next-mth" (click)="nextMonth()">&gt;</div>
   </div>
-  <div class="week" [ngClass]="{ 'week-show': showWeeks }">
-    @if(showWeeks) {
-    <div class="week-number">Wk</div>
-    } @for (dayName of dayNames; track $index) {
-    <div class="week-number">{{ dayName }}</div>
+  @switch (mode) { @case ('month') {
+  <div>
+    <!-- <div>Month select mode</div> -->
+    <div class="month-select">
+      @for (month of monthNames; track $index) {
+      <div class="month-item" (click)="selectMonth($index)">
+        <div class="month-number">{{ $index + 1 | number : "2.0-0" }}</div>
+        <div class="mth-name">{{ month }}</div>
+      </div>
+      }
+    </div>
+  </div>
+  } @case ('year'){
+  <!-- <div class="month">Year select mode</div> -->
+  <div class="year-select">
+    <div class="year-item year-range-change" (click)="changeYears(-3)">
+      &#11205;
+    </div>
+    @for (year of years; track $index) {
+    <div class="year-item" (click)="selectYear($index)">{{ year }}</div>
+    }
+    <div class="year-item year-range-change" (click)="changeYears(+3)">
+      &#11206;
+    </div>
+  </div>
+  } @case ('day'){
+  <div>
+    <div class="week" [ngClass]="{ 'week-show': showWeeks }">
+      @if(showWeeks) {
+      <div class="week-number" style="font-size: smaller">Week</div>
+      } @for (dayName of dayNames; track $index) {
+      <div class="week-number">{{ dayName }}</div>
+      }
+    </div>
+    @for (week of weeks; track $index) {
+    <div class="week" [ngClass]="{ 'week-show': showWeeks }">
+      @if(showWeeks) {
+      <div class="week-number">W:{{ week.weekNumber }}</div>
+      } @for (day of week.days; track $index) {
+      <div
+        class="day"
+        [ngClass]="{
+          selected: day.selected,
+          disabled: day.disabled,
+          today: day.today,
+          holiday: day.holiday
+        }"
+        (click)="selectDay(day)"
+      >
+        <!-- (click)="day.selected = !day.selected" -->
+        {{ day.day }}
+      </div>
+      }
+    </div>
     }
   </div>
-  @for (week of weeks; track $index) {
-  <div class="week" [ngClass]="{ 'week-show': showWeeks }">
-    @if(showWeeks) {
-    <div class="week-number">W:{{ week.weekNumber }}</div>
-    } @for (day of week.days; track $index) {
-    <div
-      class="day"
-      [ngClass]="{
-        selected: day.selected,
-        disabled: day.disabled,
-        today: day.today,
-        holiday: day.holiday
-      }"
-      (click)="selectDay(day)"
-    >
-      <!-- (click)="day.selected = !day.selected" -->
-      {{ day.day }}
-    </div>
-    }
-  </div>
-  }
+
+  } }
 </div>

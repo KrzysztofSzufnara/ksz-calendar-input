@@ -22,10 +22,6 @@ import { DateHelper } from '../helpers/date.helper';
   //changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CalendarTableComponent implements OnInit, OnDestroy {
-  selectDay(day: DayOfWeek) {
-    console.log('Day selected', day.date);
-    this.dateSelected.emit(day.date);
-  }
   weeks: WeekOfMonth[] = [];
   //  month = 3;
   dirtyInput: boolean | undefined;
@@ -51,6 +47,11 @@ export class CalendarTableComponent implements OnInit, OnDestroy {
   ];
   dayNames = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
   currentYear = 0;
+
+  mode: 'day' | 'month' | 'year' = 'day';
+
+  years: number[] = [];
+
   private readonly subscribe$ = new Subscription();
   ngOnDestroy(): void {
     this.subscribe$.unsubscribe();
@@ -95,6 +96,7 @@ export class CalendarTableComponent implements OnInit, OnDestroy {
   }
 
   generateDate() {
+    console.log('generateDate', this.inputDate);
     if (this.tryParseDate(this.inputDate!) === undefined) {
       return;
     }
@@ -112,13 +114,13 @@ export class CalendarTableComponent implements OnInit, OnDestroy {
     const currentDate = DateHelper.localToUtc(new Date())
       .toISOString()
       .slice(0, 10);
-    console.log('currentDate', currentDate);
+    //console.log('currentDate', currentDate);
 
     if (prevMonthDate === 0) {
       yearDiff = 1;
       prevMonthDate = 12;
     }
-    //console.log('generate date', prevYear, prevMonthDate);
+    //console.log('generate date', yearDiff, prevMonthDate);
 
     const prevMonth = this.calculateDaysCountInMonth(
       new Date(this.currentYear - yearDiff, prevMonthDate, 0)
@@ -127,14 +129,15 @@ export class CalendarTableComponent implements OnInit, OnDestroy {
       this.inputDate!
     );
     //console.log('generateDate', this.startDate, firstDay);
-
+    //todo: policzyć startowy tydzień
     for (let i = 0; i < 6; i++) {
       const week = <WeekOfMonth>{
         weekNumber: i,
         days: [],
       };
-      let month = this.currentMonth;
+
       for (let j = 0; j < 7; j++) {
+        let month = this.currentMonth;
         let yearModifier = 0;
         let disable = false;
         let dateDay = i * 7 + j - firstDay + 1;
@@ -142,24 +145,26 @@ export class CalendarTableComponent implements OnInit, OnDestroy {
           dateDay = prevMonth + dateDay;
           disable = true;
           month = this.currentMonth - 1;
+          if (month < 0) {
+            month = 11;
+            yearModifier = -1;
+          }
         } else if (dateDay > currentMonthDaysCount) {
           dateDay = dateDay - currentMonthDaysCount;
           disable = true;
           month = this.currentMonth + 1;
+          if (month > 11) {
+            month = 0;
+            yearModifier = 1;
+          }
         }
 
-        const date = new Date(this.currentYear, month, dateDay);
+        const date = new Date(this.currentYear + yearModifier, month, dateDay);
         const today =
           DateHelper.localToUtc(date).toISOString().slice(0, 10) === currentDate
             ? true
             : false;
 
-        // const DayOfWeek = new Date(
-        //   this.startDate!.getFullYear(),
-        //   this.startDate!.getMonth(),
-        //   dateDay
-        // ).getDay();
-        // const holiday = DayOfWeek === 6 || DayOfWeek === 0 ? true : false;
         const holiday = j == 0 || j == 6;
         const day = <DayOfWeek>{
           day: dateDay,
@@ -173,6 +178,61 @@ export class CalendarTableComponent implements OnInit, OnDestroy {
       }
       this.weeks.push(week);
     }
-    console.log(this.weeks);
+    // console.log(this.weeks);
+  }
+  nextMonth() {
+    let month = this.currentMonth;
+    month++;
+    if (month > 11) {
+      month = 0;
+      this.currentYear++;
+    }
+    this.currentMonth = month;
+    this.inputDate = new Date(this.currentYear, month, 1);
+    this.generateDate();
+  }
+  prevMonth() {
+    let month = this.currentMonth;
+    month--;
+    if (month < 0) {
+      month = 11;
+      this.currentYear--;
+    }
+    this.currentMonth = month;
+    this.inputDate = new Date(this.currentYear, month, 1);
+    this.generateDate();
+  }
+  selectDay(day: DayOfWeek) {
+    console.log('Day selected', day.date);
+    this.dateSelected.emit(day.date);
+  }
+
+  enterMonthSelector() {
+    this.mode = 'month';
+  }
+  enterYearSelector() {
+    this.years = [];
+    for (let i = -3; i < 4; i++) {
+      this.years.push(this.currentYear + i);
+    }
+    this.mode = 'year';
+  }
+  selectMonth(month: number) {
+    this.currentMonth = month;
+    this.inputDate = new Date(this.currentYear, this.currentMonth, 1);
+    this.generateDate();
+    this.mode = 'day';
+  }
+
+  selectYear(index: number) {
+    this.currentYear = this.years[index];
+    this.mode = 'month';
+  }
+
+  changeYears(num: number) {
+    this.years.forEach((year, index) => {
+      this.years[index] = year + num;
+    });
+    console.log('changeYears', this.years);
   }
 }
