@@ -17,7 +17,7 @@
     [inputDate]="formControl.value"
     [setDate]="inputDate$?.asObservable()"
     (dateSelected)="setDate($event)"
-    [emptyDateBehavior]="'today'"
+    [emptyDateBehavior]="'year'"
     [showBar]="true"
   ></app-calendar-table>
 

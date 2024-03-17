@@ -1,3 +1,7 @@
+.err {
+  outline: #ff0000 solid 1px;
+  outline-offset: -2px;
+}
 .calendar-container {
   margin: auto;
   position: relative;
@@ -93,11 +97,8 @@
   color: #777;
 }
 .today {
-  // border: 2px solid #ff000088;
-  border-radius: 25%;
-  // padding-top: 3px;
-  // padding-bottom: 3px;
-  box-shadow: inset 0px 0px 5px #ff0000;
+  outline: #ff0000aa solid 2px;
+  outline-offset: -2px;
 }
 .holiday {
   color: darkorange;

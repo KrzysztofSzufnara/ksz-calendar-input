@@ -27,7 +27,7 @@ import {
 })
 export class AppComponent implements OnInit {
   ngOnInit(): void {
-    this.form.get('data')?.setValue('2022-03-10');
+    this.form.get('data')?.setValue('2024-03-10');
   }
   title = 'ksz-calendar-input';
   form = new FormGroup({

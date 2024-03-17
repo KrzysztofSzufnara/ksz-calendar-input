@@ -65,23 +65,31 @@ export class CalendarTableComponent implements OnInit, OnDestroy {
 
   constructor(private cdr: ChangeDetectorRef) {}
 
+  //TODO: fix - remove this from here
+
+  //TODO: fix - remove this from here
+
   ngOnInit(): void {
     this.dirtyInput = false;
+
+    if (this.tryParseDate(this.inputDate) === undefined) {
+      //if (value === '') {
+      if (this.emptyDateBehavior === 'year') {
+        this.inputDate = new Date();
+        this.currentYear = this.inputDate.getFullYear();
+        this.enterYearSelector();
+        this.mode = 'year';
+      } else {
+        this.inputDate = new Date();
+        //this.dirtyInput = true;
+      }
+    }
+
     this.subscribe$.add(
       this.setDate?.subscribe((value) => {
-        this.inputDate = this.tryParseDate(value);
+        console.log('setDate', value);
 
-        //TODO: fix - remove this from here
-        if (this.inputDate === undefined) {
-          if (this.emptyDateBehavior === 'year') {
-            this.currentYear = new Date().getFullYear();
-            this.enterYearSelector();
-            this.mode = 'year';
-          } else {
-            this.inputDate = new Date();
-          }
-        }
-        //TODO: fix - remove this from here
+        this.inputDate = this.tryParseDate(value);
 
         this.generateDate();
         this.cdr.detectChanges();
@@ -99,9 +107,11 @@ export class CalendarTableComponent implements OnInit, OnDestroy {
   }
 
   tryParseDate(date: Date | null | undefined): Date | undefined {
-    const parsedDate = date && new Date(date);
+    const parsedDate = new Date(date!);
+    console.log('parsedDate', parsedDate);
+
     if (!parsedDate || isNaN(parsedDate.getTime())) {
-      //this.dirtyInput = true;
+      this.dirtyInput = true;
       return undefined;
     }
     this.dirtyInput = false;
@@ -118,6 +128,7 @@ export class CalendarTableComponent implements OnInit, OnDestroy {
   generateDate() {
     console.log('generateDate', this.inputDate);
     if (this.tryParseDate(this.inputDate!) === undefined) {
+      this.dirtyInput = true;
       return;
     }
 

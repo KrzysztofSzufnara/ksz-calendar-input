@@ -1,10 +1,13 @@
-<div class="calendar-container">
+<div
+  class="calendar-container"
+  [ngClass]="{ err: dirtyInput && mode === 'day' }"
+>
   <p>Pick date:</p>
 
   <div class="month">
-    @if (dirtyInput) {
+    <!-- @if (dirtyInput && mode === 'day') {
     <p style="color: red">Bad input date!</p>
-    }
+    } -->
     <div class="arrows prev-mth" (click)="prevMonth()">&lt;</div>
     <div class="mth">
       <div class="year" (click)="enterYearSelector()">{{ currentYear }}</div>
