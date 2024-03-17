@@ -22,14 +22,24 @@ import { DateHelper } from '../helpers/date.helper';
   //changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CalendarTableComponent implements OnInit, OnDestroy {
-  weeks: WeekOfMonth[] = [];
   //  month = 3;
-  dirtyInput: boolean | undefined;
+  // Inputs
   @Input() showWeeks: boolean = false;
   @Input() inputDate?: Date;
 
-  @Output() dateSelected = new EventEmitter<Date>();
   @Input() setDate?: Observable<any>;
+  @Input() firstDayOfWeek: number = 0;
+  @Input() showBar = false;
+  @Input()
+  emptyDateBehavior: 'today' | 'year' = 'today';
+
+  // Outputs
+  @Output() dateSelected = new EventEmitter<Date | undefined>();
+
+  // Private
+  dirtyInput: boolean | undefined;
+  weeks: WeekOfMonth[] = [];
+
   currentMonth: number = 0;
   monthNames = [
     'January',
@@ -49,45 +59,55 @@ export class CalendarTableComponent implements OnInit, OnDestroy {
   currentYear = 0;
 
   mode: 'day' | 'month' | 'year' = 'day';
-
   years: number[] = [];
 
   private readonly subscribe$ = new Subscription();
-  ngOnDestroy(): void {
-    this.subscribe$.unsubscribe();
-  }
+
   constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.dirtyInput = false;
-    //console.log('On Init');
     this.subscribe$.add(
       this.setDate?.subscribe((value) => {
         this.inputDate = this.tryParseDate(value);
+
+        //TODO: fix - remove this from here
+        if (this.inputDate === undefined) {
+          if (this.emptyDateBehavior === 'year') {
+            this.currentYear = new Date().getFullYear();
+            this.enterYearSelector();
+            this.mode = 'year';
+          } else {
+            this.inputDate = new Date();
+          }
+        }
+        //TODO: fix - remove this from here
+
         this.generateDate();
         this.cdr.detectChanges();
-
-        //console.log('setDate', value);
       })
     );
+    if (this.firstDayOfWeek > 6) this.firstDayOfWeek = 0;
 
+    if (this.firstDayOfWeek !== 0) {
+      this.rollDayNames();
+    }
     //if (!this.startDate) this.startDate = new Date();
   }
+  ngOnDestroy(): void {
+    this.subscribe$.unsubscribe();
+  }
 
-  tryParseDate(date: Date | null | undefined) {
-    const newdate = date && new Date(date);
-    if (!newdate) {
-      console.warn(`tryParseDate: invalid date: ${date}`);
-      return undefined;
-    }
-    if (isNaN(newdate.getTime())) {
-      console.warn(`tryParseDate: invalid date: ${date}`);
+  tryParseDate(date: Date | null | undefined): Date | undefined {
+    const parsedDate = date && new Date(date);
+    if (!parsedDate || isNaN(parsedDate.getTime())) {
+      //this.dirtyInput = true;
       return undefined;
     }
     this.dirtyInput = false;
-    this.currentMonth = newdate.getMonth() || 0;
+    this.currentMonth = parsedDate.getMonth();
     this.cdr.detectChanges();
-    return newdate;
+    return parsedDate;
   }
 
   private calculateDaysCountInMonth(date: Date): number {
@@ -102,11 +122,14 @@ export class CalendarTableComponent implements OnInit, OnDestroy {
     }
 
     this.weeks = [];
-    const firstDay = new Date(
-      this.inputDate!.getFullYear(),
-      this.inputDate!.getMonth(),
-      1
-    ).getDay();
+    const firstDay =
+      new Date(
+        this.inputDate!.getFullYear(),
+        this.inputDate!.getMonth(),
+        1
+      ).getDay() - this.firstDayOfWeek;
+    const weekendDayOne = 7 - this.firstDayOfWeek;
+    const weekendDayTwo = 6 - this.firstDayOfWeek;
 
     let prevMonthDate = this.inputDate!.getMonth();
     this.currentYear = this.inputDate!.getFullYear();
@@ -130,7 +153,10 @@ export class CalendarTableComponent implements OnInit, OnDestroy {
     );
     //console.log('generateDate', this.startDate, firstDay);
     //todo: policzyć startowy tydzień
+
     for (let i = 0; i < 6; i++) {
+      //let weekNum = weekNumber + i;
+
       const week = <WeekOfMonth>{
         weekNumber: i,
         days: [],
@@ -165,7 +191,8 @@ export class CalendarTableComponent implements OnInit, OnDestroy {
             ? true
             : false;
 
-        const holiday = j == 0 || j == 6;
+        const holiday = j == weekendDayOne || j == weekendDayTwo;
+        //|| j == 6;
         const day = <DayOfWeek>{
           day: dateDay,
           holiday: holiday && !disable,
@@ -176,9 +203,37 @@ export class CalendarTableComponent implements OnInit, OnDestroy {
         };
         week.days.push(day);
       }
+      week.weekNumber = this.getWeekNumber(week.days[0].date);
       this.weeks.push(week);
     }
     // console.log(this.weeks);
+  }
+
+  rollDayNames() {
+    const len = this.dayNames.length;
+    this.dayNames.push(
+      ...this.dayNames.splice(0, ((this.firstDayOfWeek % len) + len) % len)
+    );
+  }
+  getWeekNumber(date: Date): number {
+    const tempDate = new Date(date.valueOf());
+    const dayNum = (date.getDay() + 6) % 7;
+    tempDate.setDate(tempDate.getDate() - dayNum + 3);
+    const firstThursday = tempDate.valueOf();
+    tempDate.setMonth(0, 1);
+    if (tempDate.getDay() !== 4) {
+      tempDate.setMonth(0, 1 + ((4 - tempDate.getDay() + 7) % 7));
+    }
+    return 1 + Math.ceil((firstThursday - tempDate.valueOf()) / 604800000); // 604800000 = number of milliseconds in a week
+  }
+  clear() {
+    this.inputDate = undefined;
+    this.dateSelected.emit(this.inputDate);
+  }
+  setToday() {
+    this.inputDate = new Date();
+    this.generateDate();
+    this.dateSelected.emit(this.inputDate);
   }
   nextMonth() {
     let month = this.currentMonth;

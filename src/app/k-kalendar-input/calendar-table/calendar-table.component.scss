@@ -76,6 +76,7 @@
   align-content: center;
   padding-top: 5px;
   padding-bottom: 5px;
+  font-size: smaller;
 }
 .day {
   color: lightgrey;
@@ -92,8 +93,11 @@
   color: #777;
 }
 .today {
-  border: 2px solid #ff000088;
+  // border: 2px solid #ff000088;
   border-radius: 25%;
+  // padding-top: 3px;
+  // padding-bottom: 3px;
+  box-shadow: inset 0px 0px 5px #ff0000;
 }
 .holiday {
   color: darkorange;
@@ -121,16 +125,16 @@
   margin: auto;
   width: 100%;
 }
-.month .mth .mth-name {
+.month .mth * {
   justify-content: center;
   text-align: center;
   margin: auto;
 }
-.month .mth .year {
-  justify-content: center;
-  text-align: center;
-  margin: auto;
+
+.month .mth :hover {
+  color: #aaa;
 }
+
 .month .arrows {
   cursor: pointer;
   background-color: rgba($color: #101010, $alpha: 0.5);
@@ -141,4 +145,15 @@
   border: 1px solid #777;
   font-weight: bolder;
   padding: 5px 10px;
+}
+
+.bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #eee;
+}
+.bar .btn {
+  margin: 0.25rem 0.5rem;
+  padding: 0.25rem;
 }

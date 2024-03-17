@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 
@@ -25,10 +25,14 @@ import {
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+  ngOnInit(): void {
+    this.form.get('data')?.setValue('2022-03-10');
+  }
   title = 'ksz-calendar-input';
   form = new FormGroup({
-    data: new FormControl('2024-03-01'),
+    //todo: zrobić na Date()
+    data: new FormControl(''),
   });
 
   onSubmit() {

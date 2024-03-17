@@ -100,18 +100,24 @@ export class KKalendarInputComponent implements ControlValueAccessor, OnInit {
     this.showCalendar = !this.showCalendar;
   }
 
-  setDate(date: Date) {
-    //console.log('emit date', new Date(date.setUTCHours(0, 0, 0, 0)));
-    const now_utc = DateHelper.localToUtc(date);
+  setDate(date: Date | undefined) {
+    if (date === undefined) {
+      this.valueChange.emit('');
+      this.formControl.setValue('', { emitEvent: true });
+      this.showCalendar = false;
+    } else {
+      //console.log('emit date', new Date(date.setUTCHours(0, 0, 0, 0)));
+      const now_utc = DateHelper.localToUtc(date);
 
-    console.log('utc date', new Date(now_utc));
+      console.log('utc date', new Date(now_utc));
 
-    const dateString = now_utc.toISOString().slice(0, 10);
-    this.valueChange.emit(dateString);
-    console.log('dateString', dateString);
+      const dateString = now_utc.toISOString().slice(0, 10);
+      this.valueChange.emit(dateString);
+      console.log('dateString', dateString);
 
-    this.formControl.setValue(dateString, { emitEvent: true });
-    this.showCalendar = false;
+      this.formControl.setValue(dateString, { emitEvent: true });
+      this.showCalendar = false;
+    }
   }
 
   ngOnInit(): void {
