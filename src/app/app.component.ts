@@ -31,7 +31,7 @@ export class AppComponent implements OnInit {
   }
   title = 'ksz-calendar-input';
   form = new FormGroup({
-    //todo: zrobić na Date()
+    //todo: change to Date()
     data: new FormControl(''),
   });
 

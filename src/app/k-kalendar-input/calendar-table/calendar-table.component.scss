@@ -1,5 +1,28 @@
+//VARIABLES
+//COLORS
+$background-container-color: rgba(30, 30, 30, 0.9);
+$color-container-border: #000;
+$color-item: rgba(184, 222, 210, 0.5);
+$calendar-item-hover-color: rgba(200, 168, 128, 0.644);
+$color-disabled: #777;
+$color-holiday: darkorange;
+$color-items-normal: #eee;
+$background-button-color: lighten($background-container-color, 20%);
+$color-outline-today: #ff0000aa;
+$color-error-outline: #ff0000;
+$color-week-number: yellowgreen;
+
+//SETTINGS
+$border-elements: 1px solid $color-items-normal;
+
+@mixin center-items {
+  text-align: center;
+  align-content: center;
+}
+
+//SCSS
 .err {
-  outline: #ff0000 solid 1px;
+  outline: $color-error-outline solid 1px;
   outline-offset: -2px;
 }
 .calendar-container {
@@ -7,13 +30,12 @@
   position: relative;
   z-index: 1;
   top: 0px;
-
   left: 0px;
-  right: 0px;
-  border: 1px solid black;
+  // right: 0px;
+  border: 1px solid $color-container-border;
   border-radius: 3px;
   min-height: 80px;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: $background-container-color;
 }
 .week {
   display: grid;
@@ -33,26 +55,22 @@
   padding-bottom: 5px;
   display: flex;
   flex-direction: column;
-  color: rgba(184, 222, 210, 0.5);
-  text-align: center;
-  align-content: center;
+  color: $color-item;
+  @include center-items();
   font-size: 90%;
+  &:hover {
+    background-color: $calendar-item-hover-color;
+  }
 }
 .month-number {
-  color: rgba(184, 222, 210, 0.5);
-  text-align: center;
-  align-content: center;
+  //color: rgba(184, 222, 210, 0.5);
+  @include center-items();
 }
 
 .month-name {
-  color: rgba(184, 222, 210, 0.5);
-  text-align: center;
-  align-content: center;
+  //color: rgba(184, 222, 210, 0.5);
+  @include center-items();
   font-size: small;
-}
-
-.month-item:hover {
-  background-color: #777;
 }
 
 .year-select {
@@ -62,99 +80,112 @@
 
 .year-select .year-item {
   text-align: center;
-  color: lightgray;
+  color: $color-items-normal;
   padding: 3px;
   font-weight: 700;
 }
 
 .year-range-change {
-  background-color: rgba(200, 128, 200, 0.5);
+  background-color: $background-button-color;
 }
 
 .year-item:hover {
-  background-color: #777;
+  background-color: $calendar-item-hover-color;
 }
 .week-number {
-  color: yellowgreen;
-  text-align: center;
-  align-content: center;
+  color: $color-week-number;
+  @include center-items();
   padding-top: 5px;
   padding-bottom: 5px;
   font-size: smaller;
 }
 .day {
-  color: lightgrey;
-  text-align: center;
-  align-content: center;
+  color: $color-items-normal;
+  @include center-items();
   padding-top: 5px;
   padding-bottom: 5px;
+  &:hover {
+    background-color: $calendar-item-hover-color;
+  }
 }
 
 .selected {
-  background-color: rgba(200, 128, 200, 0.5);
+  background-color: $background-button-color;
 }
 .disabled {
-  color: #777;
+  color: $color-disabled;
+  &:hover {
+    color: darken($color-disabled, 20%);
+  }
 }
+
 .today {
-  outline: #ff0000aa solid 2px;
+  outline: $color-outline-today solid 2px;
   outline-offset: -2px;
 }
 .holiday {
-  color: darkorange;
+  color: $color-holiday;
+  &:hover {
+    color: lighten($color-holiday, 20%);
+  }
 }
 
-.day:hover {
-  background-color: rgba(128, 128, 200, 0.5);
-}
 .month {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 2px solid #eee;
+  border-bottom: $border-elements;
 }
 
 .month .mth {
   display: flex;
-  flex-direction: row;
   justify-content: space-evenly;
-  text-align: center;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  color: #eee;
+  align-items: center;
+  padding: 5px;
+  color: $color-items-normal;
   font-weight: bold;
-  margin: auto;
   width: 100%;
-}
-.month .mth * {
-  justify-content: center;
-  text-align: center;
-  margin: auto;
-}
 
-.month .mth :hover {
-  color: #aaa;
+  & > * {
+    justify-content: center;
+    text-align: center;
+    &:hover {
+      color: darken($color-items-normal, 20%);
+    }
+  }
 }
-
 .month .arrows {
   cursor: pointer;
-  background-color: rgba($color: #101010, $alpha: 0.5);
-  color: #eee;
-  text-align: center;
-  align-content: center;
-  border-radius: 3px;
-  border: 1px solid #777;
+  //background-color: $background-button-color;
+  color: $color-items-normal;
+  @include center-items();
+  // border-radius: 3px;
+  // border: 1px solid $color-container-border;
   font-weight: bolder;
   padding: 5px 10px;
+  &:hover {
+    background-color: $background-button-color;
+    color: darken($color-items-normal, 20%);
+  }
 }
 
 .bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 2px solid #eee;
+  border-top: $border-elements;
 }
 .bar .btn {
-  margin: 0.25rem 0.5rem;
-  padding: 0.25rem;
+  cursor: pointer;
+  //background-color: $background-button-color;
+  color: $color-items-normal;
+  @include center-items();
+  border-radius: 3px;
+  border-bottom: 1px solid $color-container-border;
+  padding: 5px 10px;
+  margin: 0.25rem 0.8rem;
+  &:hover {
+    color: darken($color-items-normal, 20%);
+    background-color: $background-button-color;
+  }
 }

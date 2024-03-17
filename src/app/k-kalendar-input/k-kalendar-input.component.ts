@@ -56,7 +56,7 @@ export class KKalendarInputComponent implements ControlValueAccessor, OnInit {
   // @Input() fieldName?: string;
 
   //public value!: string;
-  formControl: FormControl = new FormControl<string>('');
+  formControl: FormControl = new FormControl();
   destroyRef: DestroyRef = inject(DestroyRef);
 
   // get formField(): FormControl {
